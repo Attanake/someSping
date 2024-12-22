@@ -1,0 +1,10 @@
+---
+  server:
+    port: 8080
+
+  spring:
+    datasource:
+      url: jdbc:postgresql://localhost/SpringTesting
+      username: attanake
+      password: 9313
+      driver-class-name: org.postgresql.Driver
