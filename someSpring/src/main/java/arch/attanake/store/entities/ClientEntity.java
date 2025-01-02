@@ -3,28 +3,28 @@ package arch.attanake.store.entities;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
 
-import lombok.Setter;
-import lombok.Getter;
-
+import lombok.*;
 
 import java.time.Instant;
-import java.util.List;
 
 @Entity
 @Table(name = "Clients")
 @Setter
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class ClientEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
-    @Column(name = "clientid")
     private Long clientId;
 
-    @Column(name = "secondname")
-    private String secondName;
+    private String identificationNum;
 
     private String name;
+
+    private String secondName;
 
     private String surname;
 
@@ -38,12 +38,7 @@ public class ClientEntity {
     @Column(unique = true)
     private String email;
 
-    @OneToMany
-    private List<CardAccountEntity> accounts;
-
-    @OneToMany
-    private List<CreditEntity> credits;
-
     @OneToOne
+    @JoinColumn(name = "client_id", referencedColumnName = "clientId")
     private ClientLoginDetailsEntity loginDetails;
 }

@@ -1,13 +1,15 @@
 package arch.attanake.store.entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "Client_login_details")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class ClientLoginDetailsEntity {
 
     @Id
@@ -17,4 +19,8 @@ public class ClientLoginDetailsEntity {
     private String login;
 
     private String password;
+
+    @OneToOne
+    @JoinColumn(name = "owner", referencedColumnName = "clientId")
+    private ClientEntity client;
 }

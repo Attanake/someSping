@@ -1,18 +1,19 @@
 package arch.attanake.store.entities;
 
-import arch.attanake.store.AccountType;
-import arch.attanake.store.Currencies;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+
 
 @Entity
 @Table(name = "Card_account")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class CardAccountEntity {
 
     @Id
@@ -33,4 +34,8 @@ public class CardAccountEntity {
     private Instant accTerm;
 
     private Instant calculationInterval;
+
+    @ManyToOne
+    @JoinColumn(name = "owner", referencedColumnName = "clientId")
+    private ClientEntity owner;
 }

@@ -1,4 +1,4 @@
-package arch.attanake.store;
+package arch.attanake.store.entities;
 
 public enum AccountType {
     BUDGET,

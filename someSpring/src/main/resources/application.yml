@@ -8,3 +8,6 @@
       username: attanake
       password: 9313
       driver-class-name: org.postgresql.Driver
+    jpa:
+      hibernate:
+        ddl-auto: update

@@ -1,10 +1,7 @@
 package arch.attanake.store.entities;
 
-import arch.attanake.store.LoanType;
-
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -13,6 +10,9 @@ import java.time.Instant;
 @Table(name = "Credits")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class CreditEntity {
 
     @Id
@@ -22,7 +22,7 @@ public class CreditEntity {
     @Enumerated(EnumType.STRING)
     private LoanType loanType;
 
-    private float interestRate;
+    private Float interestRate;
 
     private Instant loanTerm;
 
@@ -36,4 +36,7 @@ public class CreditEntity {
 
     private Instant finalFeeDate;
 
+    @ManyToOne
+    @JoinColumn(name = "owner", referencedColumnName = "clientId")
+    private ClientEntity owner;
 }
