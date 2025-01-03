@@ -19,10 +19,10 @@ public class CreditEntity {
     @GeneratedValue(strategy = GenerationType.TABLE)
     private Long creditId;
 
+    private BigDecimal startCreditAmount;
+
     @Enumerated(EnumType.STRING)
     private LoanType loanType;
-
-    private Float interestRate;
 
     private Instant loanTerm;
 

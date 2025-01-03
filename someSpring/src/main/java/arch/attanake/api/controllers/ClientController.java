@@ -2,18 +2,16 @@ package arch.attanake.api.controllers;
 
 import arch.attanake.api.dto.ClientDto;
 import arch.attanake.api.exceptions.BadRequestException;
+import arch.attanake.api.exceptions.NotFoundException;
 import arch.attanake.api.factroies.ClientDtoFactory;
 
 import arch.attanake.store.entities.ClientEntity;
-import arch.attanake.store.repositories.ClientLoginDetailsRepository;
 import arch.attanake.store.repositories.ClientRepository;
 import jakarta.transaction.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 
@@ -24,9 +22,9 @@ public class ClientController {
 
     private final ClientRepository clientRepository;
 
-    private final ClientDtoFactory clientDtoFactory;
-
     private static final String CREATE_USER = "/api/users";
+    private static final String GET_USER = "/api/users/{client_id}";
+    private static final String EDIT_USER = "/api/users/{client_id}";
 
     @PostMapping(CREATE_USER)
     public ClientDto createUser(
@@ -46,6 +44,7 @@ public class ClientController {
                             String.format("Client with \"%s\" identification number already exists",identificationNum));
                 });
 
+
         ClientEntity client = clientRepository.saveAndFlush(
                 ClientEntity.builder()
                         .identificationNum(identificationNum)
@@ -58,7 +57,14 @@ public class ClientController {
                         .phoneNum(phoneNum)
                         .build()
         );
-
     return ClientDtoFactory.makeClientDto(client);
     }
+
+    @GetMapping(GET_USER)
+    public ClientEntity getUser(@PathVariable("client_id") Long clientId){
+        return clientRepository
+                .findById(clientId)
+                .orElseThrow(()-> new NotFoundException("Client(id =" + clientId + ") not found"));
+    }
+
 }

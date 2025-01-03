@@ -9,4 +9,6 @@ public interface ClientRepository extends JpaRepository<ClientEntity, Long> {
 
     Optional<ClientEntity> findByIdentificationNum(String identificationNum);
 
+    Optional<ClientEntity> findById(Long clientId);
+
 }

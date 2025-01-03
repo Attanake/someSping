@@ -20,7 +20,5 @@ public class ClientLoginDetailsEntity {
 
     private String password;
 
-    @OneToOne
-    @JoinColumn(name = "owner", referencedColumnName = "clientId")
-    private ClientEntity client;
+    private Boolean isAdmin;
 }

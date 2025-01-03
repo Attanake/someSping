@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ClientLoginDetailsDtoFactory {
 
-    public ClientLoginDetailsDto makeCLientLoginDetailsDto(ClientLoginDetailsEntity entity){
+    public static ClientLoginDetailsDto makeClientLoginDetailsDto(ClientLoginDetailsEntity entity){
 
         return ClientLoginDetailsDto.builder()
                 .clientId(entity.getClientId())
