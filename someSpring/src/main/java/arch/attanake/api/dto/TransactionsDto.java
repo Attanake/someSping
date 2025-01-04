@@ -10,6 +10,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -31,5 +32,5 @@ public class TransactionsDto {
     BigDecimal transactionAmount;
 
     @JsonProperty("tr_date_time")
-    Instant transactionDateTime;
+    LocalDateTime transactionDateTime;
 }

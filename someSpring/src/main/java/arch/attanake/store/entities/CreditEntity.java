@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Credits")
@@ -21,20 +21,19 @@ public class CreditEntity {
 
     private BigDecimal startCreditAmount;
 
-    @Enumerated(EnumType.STRING)
-    private LoanType loanType;
+    @ManyToOne()
+    @JoinColumn(name = "loan_type", referencedColumnName = "loanType")
+    private LoanTypeEntity loanTypeEntity;
 
-    private Instant loanTerm;
+    private Integer loanTerm;
 
     private BigDecimal totalAmount;
 
     private BigDecimal loanBalance;
 
-    private Instant loanIssueDate;
+    private LocalDateTime loanIssueDate;
 
-    private BigDecimal monthlyFee;
-
-    private Instant finalFeeDate;
+    private LocalDateTime finalFeeDate;
 
     @ManyToOne
     @JoinColumn(name = "owner", referencedColumnName = "clientId")

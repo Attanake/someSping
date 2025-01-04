@@ -1,12 +1,13 @@
 package arch.attanake.api.dto;
 
-import arch.attanake.store.entities.LoanType;
+import arch.attanake.store.entities.LoanTypeEntity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -19,7 +20,7 @@ public class CreditDto {
     Long creditId;
 
     @JsonProperty("loan_type")
-    LoanType loanType;
+    LoanTypeEntity loanTypeEntity;
 
     @JsonProperty("interest_rate")
     Float interestRate;
@@ -34,11 +35,11 @@ public class CreditDto {
     BigDecimal loanBalance;
 
     @JsonProperty("loan_issue_date")
-    Instant loanIssueDate;
+    LocalDateTime loanIssueDate;
 
     @JsonProperty("monthly_fee")
     BigDecimal monthlyFee;
 
     @JsonProperty("final_fee_date")
-    Instant finalFeeDate;
+    LocalDateTime finalFeeDate;
 }

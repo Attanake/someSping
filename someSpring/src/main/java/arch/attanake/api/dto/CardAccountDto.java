@@ -8,6 +8,8 @@ import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -32,8 +34,8 @@ public class CardAccountDto {
     Float accInterestTerm;
 
     @JsonProperty("acc_term")
-    Instant accTerm;
+    LocalDateTime accTerm;
 
     @JsonProperty("calculation_interval")
-    Instant calculationInterval;
+    LocalDateTime calculationInterval;
 }

@@ -2,9 +2,8 @@ package arch.attanake.store.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Transactions")
@@ -32,5 +31,5 @@ public class TransactionEntity {
     private BigDecimal transactionAmount;
 
     @Column(name = "tr_datetime")
-    private Instant transactionDateTime = Instant.now();
+    private LocalDateTime transactionDateTime = LocalDateTime.now();
 }

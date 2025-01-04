@@ -3,24 +3,24 @@ package arch.attanake.store.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.Instant;
-
 @Entity
-@Table(name = "Credits")
+@Table(name = "Loan_type")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class LoanType {
+public class LoanTypeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
     private Long loanTypeId;
 
+    private String loanType;
+
     private Float interestRate;
 
-    private Instant maxLoanTerm;
+    private Integer maxLoanTerm;
 
-    private Instant minLoanTerm;
+    private Integer minLoanTerm;
 }

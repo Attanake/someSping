@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 @Transactional
 @RestController
@@ -32,7 +33,7 @@ public class ClientController {
             @RequestParam("name") String name,
             @RequestParam("secName") String secName,
             @RequestParam("surname") String surname,
-            @RequestParam("birthdate") Instant birthdate,
+            @RequestParam("birthdate") LocalDate birthdate,
             @RequestParam("secretWord") String secretWord,
             @RequestParam("email") String email,
             @RequestParam("phoneNum") Long phoneNum){

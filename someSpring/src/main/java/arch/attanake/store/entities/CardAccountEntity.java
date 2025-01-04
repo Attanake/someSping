@@ -4,7 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -31,9 +32,9 @@ public class CardAccountEntity {
 
     private Float accInterestTerm;
 
-    private Instant accTerm;
+    private LocalDateTime accTerm;
 
-    private Instant calculationInterval;
+    private LocalDateTime calculationInterval;
 
     @ManyToOne
     @JoinColumn(name = "owner", referencedColumnName = "clientId")

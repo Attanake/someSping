@@ -2,10 +2,9 @@ package arch.attanake.store.entities;
 
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
-
 import lombok.*;
+import java.time.LocalDate;
 
-import java.time.Instant;
 
 @Entity
 @Table(name = "Clients")
@@ -28,7 +27,7 @@ public class ClientEntity {
 
     private String surname;
 
-    private Instant birthDate;
+    private LocalDate birthDate;
 
     private String secretWord;
 
