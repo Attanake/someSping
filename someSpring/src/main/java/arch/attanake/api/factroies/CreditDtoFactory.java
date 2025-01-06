@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CreditDtoFactory {
 
-    public CreditDto makeCreditDto(CreditEntity entity){
+    public static CreditDto makeCreditDto(CreditEntity entity){
 
         return CreditDto.builder()
                 .creditId(entity.getCreditId())

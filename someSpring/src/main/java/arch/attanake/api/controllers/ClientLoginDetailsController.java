@@ -52,7 +52,7 @@ public class ClientLoginDetailsController {
         return ClientLoginDetailsDtoFactory.makeClientLoginDetailsDto(clientLoginDetails);
     }
 
-    @GetMapping("api/users_login_details/{client_id}")
+    @GetMapping("api/user_login_details/{client_id}")
     public ClientLoginDetailsEntity getLoginDetails(@PathVariable("client_id") Long clientId){
         return clientLoginDetailsRepository
                 .findById(clientId)

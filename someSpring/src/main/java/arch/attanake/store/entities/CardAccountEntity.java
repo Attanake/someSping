@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 
 @Entity
@@ -21,20 +19,16 @@ public class CardAccountEntity {
     @GeneratedValue(strategy = GenerationType.TABLE)
     private Long accId;
 
-
-    @Enumerated(EnumType.STRING)
-    private AccountType accType;
+    @ManyToOne
+    @JoinColumn(name = "accountType", referencedColumnName = "accType")
+    private CardAccountTypeEntity accType;
 
     private BigDecimal amountOnAcc;
 
     @Enumerated(EnumType.STRING)
     private Currencies accCurrency;
 
-    private Float accInterestTerm;
-
-    private LocalDateTime accTerm;
-
-    private LocalDateTime calculationInterval;
+    private Integer accTerm;
 
     @ManyToOne
     @JoinColumn(name = "owner", referencedColumnName = "clientId")

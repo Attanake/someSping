@@ -1,15 +1,15 @@
 package arch.attanake.api.factroies;
 
-import arch.attanake.api.dto.TransactionsDto;
+import arch.attanake.api.dto.TransactionDto;
 import arch.attanake.store.entities.TransactionEntity;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TransactionsDtoFactory {
+public class TransactionDtoFactory {
 
-    public TransactionsDto makeTransactionDto(TransactionEntity entity){
+    public static TransactionDto makeTransactionDto(TransactionEntity entity){
 
-        return TransactionsDto.builder()
+        return TransactionDto.builder()
                 .transactionId(entity.getTransactionId())
                 .transactionAmount(entity.getTransactionAmount())
                 .senderAccId(entity.getSenderAccId())

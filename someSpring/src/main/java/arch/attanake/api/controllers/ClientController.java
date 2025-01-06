@@ -4,16 +4,11 @@ import arch.attanake.api.dto.ClientDto;
 import arch.attanake.api.exceptions.BadRequestException;
 import arch.attanake.api.exceptions.NotFoundException;
 import arch.attanake.api.factroies.ClientDtoFactory;
-
 import arch.attanake.store.entities.ClientEntity;
 import arch.attanake.store.repositories.ClientRepository;
 import jakarta.transaction.Transactional;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.web.bind.annotation.*;
-
-import java.time.Instant;
 import java.time.LocalDate;
 
 @Transactional

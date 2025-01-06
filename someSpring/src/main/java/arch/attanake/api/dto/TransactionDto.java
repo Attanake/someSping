@@ -2,14 +2,10 @@ package arch.attanake.api.dto;
 
 import arch.attanake.store.entities.CardAccountEntity;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Data
@@ -17,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class TransactionsDto {
+public class TransactionDto {
 
     @JsonProperty("tr_id")
     Long transactionId;

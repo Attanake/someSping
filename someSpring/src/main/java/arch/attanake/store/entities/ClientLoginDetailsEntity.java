@@ -13,6 +13,7 @@ import lombok.*;
 public class ClientLoginDetailsEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private Long clientId;
 
     @Column(unique = true)

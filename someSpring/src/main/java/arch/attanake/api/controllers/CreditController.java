@@ -37,8 +37,8 @@ public class CreditController {
     private final ClientRepository clientRepository;
     private final LoanTypeRepository loanTypeRepository;
 
-    public static final String CREATE_CREDIT = "/api/credits";
-    public static final String GET_MONTHLY_PAYMENTS = "/api/credits/{credit_id}/monthly_payment";
+    private static final String CREATE_CREDIT = "/api/credits";
+    private static final String GET_MONTHLY_PAYMENTS = "/api/credits/{credit_id}/monthly_payment";
 
     @PostMapping(CREATE_CREDIT)
     public CreditDto createCredit(
@@ -86,7 +86,7 @@ public class CreditController {
         BigDecimal monthlyPaymentAmount = credit.getStartCreditAmount()
                 .multiply(BigDecimal.valueOf(credit.getLoanTypeEntity().getInterestRate()/12))
                 .multiply(BigDecimal.valueOf(pow(Double.valueOf(1+interestRate/12), loanTerm)))
-                .divide(BigDecimal.valueOf(pow(Double.valueOf(1+interestRate/12), loanTerm)-1), 2, RoundingMode.HALF_UP);
+                .divide(BigDecimal.valueOf(pow(Double.valueOf(1+interestRate/12), loanTerm)-1), 2, RoundingMode.HALF_EVEN);
 
         Map<LocalDate, BigDecimal> monthlyPayment = new HashMap<>();
 
@@ -103,7 +103,7 @@ public class CreditController {
         BigDecimal monthlyPayment = startAmount
                 .multiply(BigDecimal.valueOf(interestRate/12))
                 .multiply(BigDecimal.valueOf(pow(Double.valueOf(1+interestRate/12), loanTerm)))
-                .divide(BigDecimal.valueOf(pow(Double.valueOf(1+interestRate/12), loanTerm)-1), 2, RoundingMode.HALF_UP);
+                .divide(BigDecimal.valueOf(pow(Double.valueOf(1+interestRate/12), loanTerm)-1), 2, RoundingMode.HALF_EVEN);
 
         return monthlyPayment.multiply(BigDecimal.valueOf(loanTerm));
     }
