@@ -19,6 +19,9 @@ public class ClientDtoFactory {
                 .secretWord(entity.getSecretWord())
                 .phoneNum(entity.getPhoneNum())
                 .email(entity.getEmail())
+                .transactions(entity.getTransactions())
+                .cardAccounts(entity.getCardAccounts())
+                .credits(entity.getCredits())
                 .build();
     }
 }

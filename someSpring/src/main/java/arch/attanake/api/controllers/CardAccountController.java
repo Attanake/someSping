@@ -4,6 +4,7 @@ import arch.attanake.api.dto.CardAccountDto;
 import arch.attanake.api.exceptions.BadRequestException;
 import arch.attanake.api.exceptions.NotFoundException;
 import arch.attanake.api.factroies.CardAccountDtoFactory;
+import arch.attanake.api.factroies.ClientDtoFactory;
 import arch.attanake.store.entities.CardAccountEntity;
 import arch.attanake.store.entities.CardAccountTypeEntity;
 import arch.attanake.store.entities.ClientEntity;
@@ -16,8 +17,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.math.BigDecimal;
+import java.util.List;
 
 @Transactional
 @RestController
@@ -59,6 +60,8 @@ public class CardAccountController {
                         .owner(clientEntity)
                         .build()
         );
+
+        clientEntity.getCardAccounts().add(cardAccount);
 
         return CardAccountDtoFactory.makeCardAccountDtoFactory(cardAccount);
     }

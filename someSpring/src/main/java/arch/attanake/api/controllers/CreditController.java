@@ -2,6 +2,8 @@ package arch.attanake.api.controllers;
 
 import arch.attanake.api.dto.CreditDto;
 import arch.attanake.api.exceptions.NotFoundException;
+import arch.attanake.api.factroies.ClientDtoFactory;
+import arch.attanake.api.factroies.CreditDtoFactory;
 import arch.attanake.store.entities.ClientEntity;
 import arch.attanake.store.entities.CreditEntity;
 import arch.attanake.store.entities.LoanTypeEntity;
@@ -68,7 +70,19 @@ public class CreditController {
                         .build()
         );
 
-        return null;
+        List<CreditEntity> creditEntities = client.getCredits();
+
+        creditEntities.add(credit);
+
+        client = clientRepository.saveAndFlush(
+                ClientEntity.builder()
+                        .credits(creditEntities)
+                        .build()
+        );
+
+        ClientDtoFactory.makeClientDto(client);
+
+        return CreditDtoFactory.makeCreditDto(credit);
     }
 
 

@@ -1,5 +1,6 @@
 package arch.attanake.store.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -36,6 +37,7 @@ public class CreditEntity {
     private LocalDateTime finalFeeDate;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "owner", referencedColumnName = "clientId")
     private ClientEntity owner;
 }

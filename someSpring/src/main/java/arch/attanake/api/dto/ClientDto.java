@@ -1,5 +1,8 @@
 package arch.attanake.api.dto;
 
+import arch.attanake.store.entities.CardAccountEntity;
+import arch.attanake.store.entities.CreditEntity;
+import arch.attanake.store.entities.TransactionEntity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import lombok.*;
@@ -7,6 +10,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Builder
@@ -37,4 +41,10 @@ public class ClientDto {
     Long phoneNum;
 
     String email;
+
+    List<CardAccountEntity> cardAccounts;
+
+    List<CreditEntity> credits;
+
+    List<TransactionEntity> transactions;
 }

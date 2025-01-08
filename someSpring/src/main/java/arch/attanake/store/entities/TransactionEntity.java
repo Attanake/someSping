@@ -1,5 +1,6 @@
 package arch.attanake.store.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
@@ -21,10 +22,12 @@ public class TransactionEntity {
 
     @ManyToOne
     @JoinColumn(name = "sender_acc_id", referencedColumnName = "accId")
+    @JsonBackReference
     private CardAccountEntity senderAccId;
 
     @ManyToOne
     @JoinColumn(name = "payee_acc_id", referencedColumnName = "accId")
+    @JsonBackReference
     private CardAccountEntity payeeAccId;
 
     @Column(name = "tr_amount")

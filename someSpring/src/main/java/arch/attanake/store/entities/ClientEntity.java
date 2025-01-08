@@ -1,9 +1,13 @@
 package arch.attanake.store.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
 import lombok.*;
+import org.hibernate.annotations.LazyCollection;
+
 import java.time.LocalDate;
+import java.util.List;
 
 
 @Entity
@@ -40,4 +44,16 @@ public class ClientEntity {
     @OneToOne
     @JoinColumn(name = "client_id", referencedColumnName = "clientId")
     private ClientLoginDetailsEntity loginDetails;
+
+    @OneToMany
+    @JoinColumn(name = "credits")
+    private List<CreditEntity> credits;
+
+    @OneToMany
+    @JoinColumn(name = "card_accounts")
+    private List<CardAccountEntity> cardAccounts;
+
+    @OneToMany
+    @JoinColumn(name = "transactions")
+    private List<TransactionEntity> transactions;
 }

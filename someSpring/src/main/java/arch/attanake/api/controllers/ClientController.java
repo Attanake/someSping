@@ -10,6 +10,10 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Transactional
 @RestController
@@ -19,7 +23,8 @@ public class ClientController {
     private final ClientRepository clientRepository;
 
     private static final String CREATE_USER = "/api/users";
-    private static final String GET_USER = "/api/users/{client_id}";
+    private static final String GET_USERS = "/api/users";
+    private static final String GET_USERS_BY_ID = "/api/users/{client_id}";
     private static final String EDIT_USER = "/api/users/{client_id}";
 
     @PostMapping(CREATE_USER)
@@ -56,11 +61,23 @@ public class ClientController {
     return ClientDtoFactory.makeClientDto(client);
     }
 
-    @GetMapping(GET_USER)
+    @GetMapping(GET_USERS_BY_ID)
     public ClientEntity getUser(@PathVariable("client_id") Long clientId){
         return clientRepository
                 .findById(clientId)
                 .orElseThrow(()-> new NotFoundException("Client(id =" + clientId + ") not found"));
     }
 
+    @GetMapping(GET_USERS)
+    public List<ClientDto> getUsers(
+            @RequestParam(value = "prefix_name", required = false) Optional<String> optionalPrefixName) {
+
+        optionalPrefixName = optionalPrefixName.filter(prefixName -> !prefixName.trim().isEmpty());
+
+        Stream<ClientEntity> clientEntityStream = optionalPrefixName
+                .map(clientRepository::streamAllByNameStartsWithIgnoringCase)
+                .orElseGet(clientRepository::streamAllBy);
+
+        return clientEntityStream.map(ClientDtoFactory::makeClientDto).collect(Collectors.toList());
+    }
 }

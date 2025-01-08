@@ -16,6 +16,7 @@ public class LoanTypeEntity {
     @GeneratedValue(strategy = GenerationType.TABLE)
     private Long loanTypeId;
 
+    @Column(unique = true)
     private String loanType;
 
     private Float interestRate;
