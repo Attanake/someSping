@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Transactional
 @RestController
@@ -38,6 +37,10 @@ public class TransactionController {
                                             @RequestParam("payee_acc_id") Long payeeAccId,
                                             @RequestParam("transaction_amount") BigDecimal transactionAmount){
 
+        if(transactionAmount.intValue()<= 0){
+            throw new BadRequestException("Transaction amount is lower than required");
+        }
+
         CardAccountEntity senderAcc = cardAccountRepository
                 .findByAccId(senderAccId)
                 .orElseThrow(()-> new BadRequestException("Sender account(id="+  senderAccId + ") doesn't exists"));
@@ -49,11 +52,9 @@ public class TransactionController {
 
         ClientEntity sender = senderAcc.getOwner();
 
-        List<TransactionEntity> senderTransactionEntities = sender.getTransactions();
 
         ClientEntity payee = payeeAcc.getOwner();
 
-        List<TransactionEntity> payeeTransactionEntities = payee.getTransactions();
 
         if(senderAcc.getAmountOnAcc().compareTo(transactionAmount) < 0){
             throw new InsufficientBalanceException("Insufficient funds on balance");
@@ -86,23 +87,8 @@ public class TransactionController {
                         .build()
         );
 
-        senderTransactionEntities.add(transactionEntity);
-        payeeTransactionEntities.add(transactionEntity);
-
-        sender = clientRepository.saveAndFlush(
-                ClientEntity.builder()
-                        .transactions(senderTransactionEntities)
-                        .build()
-        );
-
-        payee = clientRepository.saveAndFlush(
-                ClientEntity.builder()
-                        .transactions(payeeTransactionEntities)
-                        .build()
-        );
-
-        ClientDtoFactory.makeClientDto(sender);
-        ClientDtoFactory.makeClientDto(payee);
+        sender.getTransactions().add(transactionEntity);
+        payee.getTransactions().add(transactionEntity);
 
         return TransactionDtoFactory.makeTransactionDto(transactionEntity);
     }

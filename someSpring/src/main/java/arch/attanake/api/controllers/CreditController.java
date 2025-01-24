@@ -2,8 +2,9 @@ package arch.attanake.api.controllers;
 
 import arch.attanake.api.dto.CreditDto;
 import arch.attanake.api.exceptions.NotFoundException;
-import arch.attanake.api.factroies.ClientDtoFactory;
+import arch.attanake.api.factroies.CardAccountDtoFactory;
 import arch.attanake.api.factroies.CreditDtoFactory;
+import arch.attanake.store.entities.CardAccountEntity;
 import arch.attanake.store.entities.ClientEntity;
 import arch.attanake.store.entities.CreditEntity;
 import arch.attanake.store.entities.LoanTypeEntity;
@@ -57,6 +58,10 @@ public class CreditController {
                 .findById(clientId)
                 .orElseThrow(()-> new NotFoundException("Client (id=" + clientId + ") doesn't exists"));
 
+        CardAccountEntity cardAccount = client.getCardAccounts().getFirst();
+        cardAccount.setAmountOnAcc(cardAccount.getAmountOnAcc().add(startCreditAmount));
+        CardAccountDtoFactory.makeCardAccountDtoFactory(cardAccount);
+
         CreditEntity credit = creditRepository.saveAndFlush(
                 CreditEntity.builder()
                         .startCreditAmount(startCreditAmount)
@@ -70,17 +75,7 @@ public class CreditController {
                         .build()
         );
 
-        List<CreditEntity> creditEntities = client.getCredits();
-
-        creditEntities.add(credit);
-
-        client = clientRepository.saveAndFlush(
-                ClientEntity.builder()
-                        .credits(creditEntities)
-                        .build()
-        );
-
-        ClientDtoFactory.makeClientDto(client);
+        client.getCredits().add(credit);
 
         return CreditDtoFactory.makeCreditDto(credit);
     }

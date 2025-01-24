@@ -7,6 +7,7 @@ import arch.attanake.store.entities.LoanTypeEntity;
 import arch.attanake.store.repositories.LoanTypeRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,10 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class LoanTypeController {
 
-    private static LoanTypeRepository loanTypeRepository;
+    private final LoanTypeRepository loanTypeRepository;
 
     private static final String CREATE_LOAN_TYPE = "/api/loan_types";
 
+
+    @PostMapping(CREATE_LOAN_TYPE)
     public LoanTypeDto createLoanType(@RequestParam("loan_type") String loanTypeName,
                                          @RequestParam("interest_rate") Float interestRate,
                                          @RequestParam("max_loan_term") Integer maxLoanTerm,

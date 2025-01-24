@@ -14,7 +14,6 @@ public class CardAccountDtoFactory {
                 .accType(entity.getAccType())
                 .amountOnAcc(entity.getAmountOnAcc())
                 .accCurrency(entity.getAccCurrency())
-                .accTerm(entity.getAccTerm())
                 .build();
     }
 }
