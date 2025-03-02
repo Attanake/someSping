@@ -4,13 +4,11 @@ import arch.attanake.api.dto.TransactionDto;
 import arch.attanake.api.exceptions.BadRequestException;
 import arch.attanake.api.exceptions.InsufficientBalanceException;
 import arch.attanake.api.factroies.CardAccountDtoFactory;
-import arch.attanake.api.factroies.ClientDtoFactory;
 import arch.attanake.api.factroies.TransactionDtoFactory;
 import arch.attanake.store.entities.CardAccountEntity;
 import arch.attanake.store.entities.ClientEntity;
 import arch.attanake.store.entities.TransactionEntity;
 import arch.attanake.store.repositories.CardAccountRepository;
-import arch.attanake.store.repositories.ClientRepository;
 import arch.attanake.store.repositories.TransactionRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -28,17 +26,17 @@ public class TransactionController {
 
     private final CardAccountRepository cardAccountRepository;
     private final TransactionRepository transactionRepository;
-    private final ClientRepository clientRepository;
 
     private static final String CREATE_TRANSACTION = "/api/transactions";
 
     @PostMapping(CREATE_TRANSACTION)
-    public TransactionDto createTransaction(@RequestParam("sender_acc_id") Long senderAccId,
+    @Transactional
+    public Boolean createTransaction(@RequestParam("sender_acc_id") Long senderAccId,
                                             @RequestParam("payee_acc_id") Long payeeAccId,
                                             @RequestParam("transaction_amount") BigDecimal transactionAmount){
 
-        if(transactionAmount.intValue()<= 0){
-            throw new BadRequestException("Transaction amount is lower than required");
+        if(transactionAmount.intValue()<=2){
+            throw new BadRequestException("Transaction amount is less than required");
         }
 
         CardAccountEntity senderAcc = cardAccountRepository
@@ -90,6 +88,7 @@ public class TransactionController {
         sender.getTransactions().add(transactionEntity);
         payee.getTransactions().add(transactionEntity);
 
-        return TransactionDtoFactory.makeTransactionDto(transactionEntity);
+        TransactionDtoFactory.makeTransactionDto(transactionEntity);
+        return Boolean.valueOf("True");
     }
 }

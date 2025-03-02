@@ -94,14 +94,14 @@ public class CreditController {
 
         BigDecimal monthlyPaymentAmount = credit.getStartCreditAmount()
                 .multiply(BigDecimal.valueOf(credit.getLoanTypeEntity().getInterestRate()/12))
-                .multiply(BigDecimal.valueOf(pow(Double.valueOf(1+interestRate/12), loanTerm)))
-                .divide(BigDecimal.valueOf(pow(Double.valueOf(1+interestRate/12), loanTerm)-1), 2, RoundingMode.HALF_EVEN);
+                .multiply(BigDecimal.valueOf(pow((double) (1 + interestRate / 12), loanTerm)))
+                .divide(BigDecimal.valueOf(pow((double) (1 + interestRate / 12), loanTerm)-1), 2, RoundingMode.HALF_EVEN);
 
         Map<LocalDate, BigDecimal> monthlyPayment = new HashMap<>();
 
         LocalDate date = LocalDate.now();
         for(int i = 0; i < credit.getLoanTerm(); i++) {
-            date = date.plus(1, ChronoUnit.MONTHS);
+            date = date.plusMonths(1);
             monthlyPayment.put(date, monthlyPaymentAmount);
         }
         return monthlyPayment;
@@ -111,8 +111,8 @@ public class CreditController {
 
         BigDecimal monthlyPayment = startAmount
                 .multiply(BigDecimal.valueOf(interestRate/12))
-                .multiply(BigDecimal.valueOf(pow(Double.valueOf(1+interestRate/12), loanTerm)))
-                .divide(BigDecimal.valueOf(pow(Double.valueOf(1+interestRate/12), loanTerm)-1), 2, RoundingMode.HALF_EVEN);
+                .multiply(BigDecimal.valueOf(pow((double) (1 + interestRate / 12), loanTerm)))
+                .divide(BigDecimal.valueOf(pow((double) (1 + interestRate / 12), loanTerm)-1), 2, RoundingMode.HALF_EVEN);
 
         return monthlyPayment.multiply(BigDecimal.valueOf(loanTerm));
     }
