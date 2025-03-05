@@ -90,7 +90,6 @@ public class TransactionController {
         sender.getTransactions().add(transactionEntity);
         payee.getTransactions().add(transactionEntity);
 
-        //TransactionDtoFactory.makeTransactionDto(transactionEntity);
         return HttpStatus.OK;
     }
 }

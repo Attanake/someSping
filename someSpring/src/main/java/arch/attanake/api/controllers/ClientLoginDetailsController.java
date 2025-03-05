@@ -3,7 +3,6 @@ package arch.attanake.api.controllers;
 import arch.attanake.api.dto.ClientLoginDetailsDto;
 import arch.attanake.api.exceptions.BadRequestException;
 import arch.attanake.api.factroies.ClientLoginDetailsDtoFactory;
-import arch.attanake.store.entities.ClientEntity;
 import arch.attanake.store.entities.ClientLoginDetailsEntity;
 import arch.attanake.store.repositories.ClientLoginDetailsRepository;
 import arch.attanake.store.repositories.ClientRepository;
@@ -11,8 +10,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.jar.Attributes;
 
 
 @Transactional

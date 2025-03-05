@@ -2,7 +2,6 @@ package arch.attanake.api.controllers;
 
 import arch.attanake.api.dto.CardAccountTypeDto;
 import arch.attanake.api.exceptions.BadRequestException;
-import arch.attanake.api.factroies.CardAccountDtoFactory;
 import arch.attanake.api.factroies.CardAccountTypeDtoFactory;
 import arch.attanake.store.entities.CardAccountTypeEntity;
 import arch.attanake.store.repositories.CardAccountTypeRepository;
