@@ -12,12 +12,14 @@ import arch.attanake.store.repositories.CardAccountRepository;
 import arch.attanake.store.repositories.TransactionRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Transactional
 @RestController
@@ -31,9 +33,9 @@ public class TransactionController {
 
     @PostMapping(CREATE_TRANSACTION)
     @Transactional
-    public Boolean createTransaction(@RequestParam("sender_acc_id") Long senderAccId,
-                                            @RequestParam("payee_acc_id") Long payeeAccId,
-                                            @RequestParam("transaction_amount") BigDecimal transactionAmount){
+    public HttpStatus createTransaction(@RequestParam("sender_acc_id") Long senderAccId,
+                                         @RequestParam("payee_acc_id") Long payeeAccId,
+                                         @RequestParam("transaction_amount") BigDecimal transactionAmount){
 
         if(transactionAmount.intValue()<=2){
             throw new BadRequestException("Transaction amount is less than required");
@@ -88,7 +90,7 @@ public class TransactionController {
         sender.getTransactions().add(transactionEntity);
         payee.getTransactions().add(transactionEntity);
 
-        TransactionDtoFactory.makeTransactionDto(transactionEntity);
-        return Boolean.valueOf("True");
+        //TransactionDtoFactory.makeTransactionDto(transactionEntity);
+        return HttpStatus.OK;
     }
 }

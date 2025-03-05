@@ -1,17 +1,13 @@
 package arc.attanake.api.controllers;
 
 import arch.attanake.api.controllers.TransactionController;
-import arch.attanake.api.dto.TransactionDto;
 import arch.attanake.api.exceptions.BadRequestException;
-import arch.attanake.api.factroies.CardAccountDtoFactory;
-import arch.attanake.api.factroies.CardAccountTypeDtoFactory;
-import arch.attanake.api.factroies.TransactionDtoFactory;
 import arch.attanake.store.entities.CardAccountEntity;
 import arch.attanake.store.entities.ClientEntity;
 import arch.attanake.store.repositories.CardAccountRepository;
 import arch.attanake.store.repositories.TransactionRepository;
-import net.bytebuddy.dynamic.DynamicType;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,14 +15,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-
-import javax.smartcardio.Card;
-import javax.swing.text.html.Option;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Optional;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(org.mockito.junit.jupiter.MockitoExtension.class)
 @ExtendWith(MockitoExtension.class)
@@ -45,6 +41,12 @@ class TransactionControllerTest {
     @InjectMocks
     private TransactionController transactionController;
 
+    private MockMvc mockMvc;
+
+    @BeforeEach
+    void setUp(){
+        mockMvc = MockMvcBuilders.standaloneSetup(transactionController).build();
+    }
 
     @Test
     void transactionClientCannotBeFounded(){
@@ -56,28 +58,36 @@ class TransactionControllerTest {
     }
 
     @Test
-    void transactionZeroValue(){
-        Long cardAccountId = 1L;
+    void transactionZeroValue() throws Exception {
+        Long firstCardAccountId = 1L;
+        Long secondCardAccountId = 2L;
         Long clientId = 1L;
-
-        TransactionController controller = new TransactionController(cardAccountRepository,transactionRepository);
 
         ClientEntity client = new ClientEntity();
         client.setClientId(clientId);
 
 
-        cardAccount = cardAccountRepository.saveAndFlush(
-                CardAccountEntity.builder()
-                        .accId(cardAccountId)
-                        .amountOnAcc(BigDecimal.valueOf(1000L))
-                        .build()
-        );
+        CardAccountEntity firstCardAccount = new CardAccountEntity(firstCardAccountId,
+                null,
+                BigDecimal.valueOf(1000L),
+                null,
+                1,
+                client);
+
+        CardAccountEntity secondCardAccount = new CardAccountEntity(secondCardAccountId,
+                null,
+                BigDecimal.valueOf(1000L),
+                null,
+                1,
+                client);
         
-        when(cardAccountRepository.findByAccId(cardAccountId)).thenReturn(Optional.of(cardAccount));
+        when(cardAccountRepository.findByAccId(firstCardAccountId)).thenReturn(Optional.of(firstCardAccount));
+        when(cardAccountRepository.findByAccId(secondCardAccountId)).thenReturn(Optional.of(secondCardAccount));
 
-        Assertions.assertEquals(
-                Boolean.valueOf("True"),
-                controller.createTransaction(cardAccountId, cardAccountId, BigDecimal.valueOf(100L)));
-
+        mockMvc.perform(post("/api/transactions")
+                .content("1")
+                .content("2")
+                .content("0"))
+                .andExpect(status().isBadRequest());
     }
 }
