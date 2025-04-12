@@ -11,6 +11,7 @@ import arch.attanake.store.entities.Currencies;
 import arch.attanake.store.repositories.CardAccountRepository;
 import arch.attanake.store.repositories.CardAccountTypeRepository;
 import arch.attanake.store.repositories.ClientRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import java.math.BigDecimal;
 
+@Tag(name = "card_account_controller")
 @Transactional
 @RestController
 @RequiredArgsConstructor

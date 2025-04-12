@@ -6,12 +6,13 @@ import arch.attanake.api.factroies.ClientLoginDetailsDtoFactory;
 import arch.attanake.store.entities.ClientLoginDetailsEntity;
 import arch.attanake.store.repositories.ClientLoginDetailsRepository;
 import arch.attanake.store.repositories.ClientRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-
+@Tag(name = "client_login_details_controller")
 @Transactional
 @RestController
 @RequiredArgsConstructor

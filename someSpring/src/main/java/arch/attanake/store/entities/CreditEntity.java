@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 public class CreditEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
     private Long creditId;
 
     private BigDecimal startCreditAmount;
@@ -35,6 +34,9 @@ public class CreditEntity {
     private LocalDateTime loanIssueDate;
 
     private LocalDateTime finalFeeDate;
+
+    @OneToOne
+    private CardAccountEntity cardAccount;
 
     @ManyToOne
     @JsonBackReference

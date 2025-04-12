@@ -5,12 +5,14 @@ import arch.attanake.api.exceptions.BadRequestException;
 import arch.attanake.api.factroies.CardAccountTypeDtoFactory;
 import arch.attanake.store.entities.CardAccountTypeEntity;
 import arch.attanake.store.repositories.CardAccountTypeRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "card_account_type_controller")
 @Transactional
 @RestController
 @RequiredArgsConstructor

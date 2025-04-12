@@ -5,12 +5,14 @@ import arch.attanake.api.exceptions.BadRequestException;
 import arch.attanake.api.factroies.LoanTypeDtoFactory;
 import arch.attanake.store.entities.LoanTypeEntity;
 import arch.attanake.store.repositories.LoanTypeRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "loan_type_controller")
 @Transactional
 @RestController
 @RequiredArgsConstructor

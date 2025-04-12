@@ -4,17 +4,15 @@ import arch.attanake.api.dto.CreditDto;
 import arch.attanake.api.exceptions.NotFoundException;
 import arch.attanake.api.factroies.CardAccountDtoFactory;
 import arch.attanake.api.factroies.CreditDtoFactory;
-import arch.attanake.store.entities.CardAccountEntity;
-import arch.attanake.store.entities.ClientEntity;
-import arch.attanake.store.entities.CreditEntity;
-import arch.attanake.store.entities.LoanTypeEntity;
+import arch.attanake.store.entities.*;
+import arch.attanake.store.repositories.CardAccountRepository;
 import arch.attanake.store.repositories.ClientRepository;
 import arch.attanake.store.repositories.CreditRepository;
 import arch.attanake.store.repositories.LoanTypeRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -22,6 +20,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
+@Tag(name = "credit_controller")
 @Transactional
 @RestController
 @RequiredArgsConstructor
@@ -39,6 +38,7 @@ public class CreditController {
     private final CreditRepository creditRepository;
     private final ClientRepository clientRepository;
     private final LoanTypeRepository loanTypeRepository;
+    private final CardAccountRepository cardAccountRepository;
 
     private static final String CREATE_CREDIT = "/api/credits";
     private static final String GET_MONTHLY_PAYMENTS = "/api/credits/{credit_id}/monthly_payment";
@@ -50,6 +50,7 @@ public class CreditController {
             @RequestParam("loan_term") Integer loanDuration,
             @RequestParam("client_id") Long clientId
             ){
+
         LoanTypeEntity loanType = loanTypeRepository
                 .findByLoanType(loanTypeName)
                 .orElseThrow(()-> new NotFoundException("Loan type " + loanTypeName +" doesn't exists"));
@@ -62,8 +63,15 @@ public class CreditController {
         cardAccount.setAmountOnAcc(cardAccount.getAmountOnAcc().add(startCreditAmount));
         CardAccountDtoFactory.makeCardAccountDtoFactory(cardAccount);
 
+        CardAccountEntity newAccount = cardAccountRepository.saveAndFlush(
+                CardAccountEntity.builder()
+                        .amountOnAcc(BigDecimal.valueOf(0L))
+                        .build()
+        );
+
         CreditEntity credit = creditRepository.saveAndFlush(
                 CreditEntity.builder()
+                        .creditId(newAccount.getAccId())
                         .startCreditAmount(startCreditAmount)
                         .loanTypeEntity(loanType)
                         .loanTerm(loanDuration)

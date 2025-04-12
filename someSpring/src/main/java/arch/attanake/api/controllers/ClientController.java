@@ -6,6 +6,7 @@ import arch.attanake.api.exceptions.NotFoundException;
 import arch.attanake.api.factroies.ClientDtoFactory;
 import arch.attanake.store.entities.ClientEntity;
 import arch.attanake.store.repositories.ClientRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Tag(name = "client_controller")
 @Transactional
 @RestController
 @RequiredArgsConstructor

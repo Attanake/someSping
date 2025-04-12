@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
 import lombok.*;
-import org.hibernate.annotations.LazyCollection;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -23,6 +22,7 @@ public class ClientEntity {
     @GeneratedValue(strategy = GenerationType.TABLE)
     private Long clientId;
 
+    @Column(unique = true)
     private String identificationNum;
 
     private String name;

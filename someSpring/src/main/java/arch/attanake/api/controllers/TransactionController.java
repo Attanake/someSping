@@ -10,6 +10,7 @@ import arch.attanake.store.entities.ClientEntity;
 import arch.attanake.store.entities.TransactionEntity;
 import arch.attanake.store.repositories.CardAccountRepository;
 import arch.attanake.store.repositories.TransactionRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.concurrent.atomic.AtomicReference;
 
+@Tag(name = "transactions_controller")
 @Transactional
 @RestController
 @RequiredArgsConstructor

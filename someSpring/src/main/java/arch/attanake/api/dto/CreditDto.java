@@ -1,5 +1,6 @@
 package arch.attanake.api.dto;
 
+import arch.attanake.store.entities.CardAccountEntity;
 import arch.attanake.store.entities.LoanTypeEntity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -42,4 +43,7 @@ public class CreditDto {
 
     @JsonProperty("final_fee_date")
     LocalDateTime finalFeeDate;
+
+    @JsonProperty("card_account")
+    CardAccountEntity cardAccount;
 }

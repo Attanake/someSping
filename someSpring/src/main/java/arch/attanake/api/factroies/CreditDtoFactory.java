@@ -11,6 +11,7 @@ public class CreditDtoFactory {
 
         return CreditDto.builder()
                 .creditId(entity.getCreditId())
+                .cardAccount(entity.getCardAccount())
                 .loanTypeEntity(entity.getLoanTypeEntity())
                 .totalAmount(entity.getTotalAmount())
                 .loanBalance(entity.getLoanBalance())
