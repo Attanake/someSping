@@ -42,6 +42,7 @@ public class CreditController {
 
     private static final String CREATE_CREDIT = "/api/credits";
     private static final String GET_MONTHLY_PAYMENTS = "/api/credits/{credit_id}/monthly_payment";
+    private static final String GET_CREDIT_BALANCE = "api/credits/{credit_id}/credit_balance";
 
     @PostMapping(CREATE_CREDIT)
     public CreditDto createCredit(
@@ -83,6 +84,8 @@ public class CreditController {
                         .build()
         );
 
+
+
         client.getCredits().add(credit);
 
         return CreditDtoFactory.makeCreditDto(credit);
@@ -123,5 +126,19 @@ public class CreditController {
                 .divide(BigDecimal.valueOf(pow((double) (1 + interestRate / 12), loanTerm)-1), 2, RoundingMode.HALF_EVEN);
 
         return monthlyPayment.multiply(BigDecimal.valueOf(loanTerm));
+    }
+
+    @GetMapping(GET_CREDIT_BALANCE)
+    public BigDecimal getCreditBalance(@PathVariable("credit_id") Long creditId){
+
+        CreditEntity credit = creditRepository
+                .findById(creditId)
+                .orElseThrow(()-> new NotFoundException("Credit (id=" + creditId + ") doesn't exists"));
+
+        CardAccountEntity cardAccount = cardAccountRepository
+                .findByAccId(creditId)
+                .orElseThrow(()-> new NotFoundException("Credit (id=\" + creditId + \") doesn't exists"));
+
+        return BigDecimal.valueOf(credit.getStartCreditAmount().compareTo(cardAccount.getAmountOnAcc()));
     }
 }
