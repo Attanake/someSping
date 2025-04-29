@@ -14,13 +14,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Tag(name = "transactions_controller")
 @Transactional
@@ -31,11 +32,12 @@ public class TransactionController {
     private final CardAccountRepository cardAccountRepository;
     private final TransactionRepository transactionRepository;
 
-    private static final String CREATE_TRANSACTION = "/api/transactions";
+    private static final String CREATE_TRANSACTION = "/api/{acc_id}/transactions/new";
+    private static final String FIND_ALL_TRANSACTIONS = "/api/{acc_id}/transactions/find_all";
 
     @PostMapping(CREATE_TRANSACTION)
     @Transactional
-    public HttpStatus createTransaction(@RequestParam("sender_acc_id") Long senderAccId,
+    public HttpStatus createTransaction(@PathVariable("acc_id") Long senderAccId,
                                          @RequestParam("payee_acc_id") Long payeeAccId,
                                          @RequestParam("transaction_amount") BigDecimal transactionAmount){
 
@@ -93,5 +95,13 @@ public class TransactionController {
         payee.getTransactions().add(transactionEntity);
 
         return HttpStatus.OK;
+    }
+
+    @GetMapping(FIND_ALL_TRANSACTIONS)
+    public List<TransactionDto> findAllTransactions(@PathVariable("acc_id")  Long accId){
+
+        Stream<TransactionEntity> transactionEntityStream = transactionRepository.streamAllByAccId(accId);
+
+        return transactionEntityStream.map(TransactionDtoFactory::makeTransactionDto).collect(Collectors.toList());
     }
 }
