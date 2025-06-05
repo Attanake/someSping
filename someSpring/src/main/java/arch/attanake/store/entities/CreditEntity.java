@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 public class CreditEntity {
 
     @Id
+    @GeneratedValue
     private Long creditId;
 
     private BigDecimal startCreditAmount;

@@ -10,6 +10,7 @@ public class ClientDtoFactory {
     public static ClientDto makeClientDto(ClientEntity entity){
 
         return ClientDto.builder()
+                .clientId(entity.getClientId())
                 .identificationNum(entity.getIdentificationNum())
                 .name(entity.getName())
                 .secondName(entity.getSecondName())

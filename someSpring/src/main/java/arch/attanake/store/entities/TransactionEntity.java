@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class TransactionEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue
     @Column(name = "tr_id")
     private Long transactionId;
 

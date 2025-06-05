@@ -100,7 +100,7 @@ public class TransactionController {
     @GetMapping(FIND_ALL_TRANSACTIONS)
     public List<TransactionDto> findAllTransactions(@PathVariable("acc_id")  Long accId){
 
-        Stream<TransactionEntity> transactionEntityStream = transactionRepository.streamAllByAccId(accId);
+        Stream<TransactionEntity> transactionEntityStream = transactionRepository.streamAllByTransactionId(accId);
 
         return transactionEntityStream.map(TransactionDtoFactory::makeTransactionDto).collect(Collectors.toList());
     }

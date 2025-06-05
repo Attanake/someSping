@@ -13,7 +13,7 @@ import lombok.*;
 public class CardAccountTypeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long accTypeId;
 
     @Column(unique = true)

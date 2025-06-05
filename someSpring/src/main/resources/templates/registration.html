@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Регистрация клиента</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+  <h2 class="text-center">Форма регистрации</h2>
+  <form th:action="@{/register}" th:object="${client}" method="post">
+    <div class="form-group">
+      <label for="identificationNum">Идентификационный номер</label>
+      <input type="text" class="form-control" id="identificationNum" th:field="*{identificationNum}" required>
+    </div>
+    <div class="form-group">
+      <label for="name">Имя</label>
+      <input type="text" class="form-control" id="name" th:field="*{name}" required>
+    </div>
+    <div class="form-group">
+      <label for="secondName">Отчество</label>
+      <input type="text" class="form-control" id="secondName" th:field="*{secondName}">
+    </div>
+    <div class="form-group">
+      <label for="surname">Фамилия</label>
+      <input type="text" class="form-control" id="surname" th:field="*{surname}" required>
+    </div>
+    <div class="form-group">
+      <label for="birthDate">Дата рождения</label>
+      <input type="date" class="form-control" id="birthDate" th:field="*{birthDate}" required>
+    </div>
+    <div class="form-group">
+      <label for="secretWord">Секретное слово</label>
+      <input type="text" class="form-control" id="secretWord" th:field="*{secretWord}" required>
+    </div>
+    <div class="form-group">
+      <label for="phoneNum">Номер телефона</label>
+      <input type="tel" class="form-control" id="phoneNum" th:field="*{phoneNum}" required>
+    </div>
+    <div class="form-group">
+      <label for="email">Электронная почта</label>
+      <input type="email" class="form-control" id="email" th:field="*{email}" required>
+    </div>
+    <button type="submit" class="btn btn-primary btn-block">Зарегистрироваться</button>
+  </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

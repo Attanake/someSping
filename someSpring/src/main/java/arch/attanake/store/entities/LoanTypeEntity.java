@@ -13,7 +13,7 @@ import lombok.*;
 public class LoanTypeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue
     private Long loanTypeId;
 
     @Column(unique = true)

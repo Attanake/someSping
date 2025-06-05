@@ -10,8 +10,10 @@ import arch.attanake.store.repositories.ClientRepository;
 import arch.attanake.store.repositories.CreditRepository;
 import arch.attanake.store.repositories.LoanTypeRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -140,5 +142,13 @@ public class CreditController {
                 .orElseThrow(()-> new NotFoundException("Credit (id=\" + creditId + \") doesn't exists"));
 
         return BigDecimal.valueOf(credit.getStartCreditAmount().compareTo(cardAccount.getAmountOnAcc()));
+    }
+
+    @GetMapping("/takeCredit")
+    public String takeCredit(HttpSession session, Model model){
+        session.setAttribute("loanType", new LoanTypeEntity());
+        model.addAttribute("client", session.getAttribute("clientId"));
+        model.addAttribute("loanType", session.getAttribute("loanType"));
+        return "takeTheCredit";
     }
 }

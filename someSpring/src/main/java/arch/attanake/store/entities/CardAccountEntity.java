@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 public class CardAccountEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue
     private Long accId;
 
     @ManyToOne

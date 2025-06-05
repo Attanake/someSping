@@ -7,8 +7,11 @@ import arch.attanake.api.factroies.ClientDtoFactory;
 import arch.attanake.store.entities.ClientEntity;
 import arch.attanake.store.repositories.ClientRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
@@ -18,7 +21,7 @@ import java.util.stream.Stream;
 
 @Tag(name = "client_controller")
 @Transactional
-@RestController
+@Controller
 @RequiredArgsConstructor
 public class ClientController {
 
@@ -27,7 +30,8 @@ public class ClientController {
     private static final String CREATE_USER = "/api/users";
     private static final String GET_USERS = "/api/users";
     private static final String GET_USERS_BY_ID = "/api/users/{client_id}";
-    private static final String EDIT_USER = "/api/users/{client_id}";
+    private static final String REGISTRATION = "/api/registration";
+    private static final String HOME = "/api/home";
 
     @PostMapping(CREATE_USER)
     public ClientDto createUser(
@@ -81,5 +85,35 @@ public class ClientController {
                 .orElseGet(clientRepository::streamAllBy);
 
         return clientEntityStream.map(ClientDtoFactory::makeClientDto).collect(Collectors.toList());
+    }
+
+    @GetMapping(REGISTRATION)
+    public String register(Model model){
+        model.addAttribute("client", new ClientEntity());
+        return "registration";
+    }
+
+    @PostMapping("/register")
+    public String registerClient(@ModelAttribute ClientEntity client) {
+        ClientEntity newClient = clientRepository.saveAndFlush(
+                ClientEntity.builder()
+                        .identificationNum(client.getIdentificationNum())
+                        .name(client.getName())
+                        .secondName(client.getSecondName())
+                        .surname(client.getSurname())
+                        .birthDate(client.getBirthDate())
+                        .secretWord(client.getSecretWord())
+                        .email(client.getEmail())
+                        .phoneNum(client.getPhoneNum())
+                        .build()
+        );
+        return "redirect:/api/reg/user_login_details/" + newClient.getClientId();
+    }
+
+    @GetMapping(HOME)
+    public String home(HttpSession session, Model model){
+        ClientEntity client = (ClientEntity) session.getAttribute("client");
+        model.addAttribute("client", client);
+        return "home";
     }
 }

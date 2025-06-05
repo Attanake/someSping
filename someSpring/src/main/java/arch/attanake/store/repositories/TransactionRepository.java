@@ -7,5 +7,5 @@ import java.util.stream.Stream;
 
 public interface TransactionRepository extends JpaRepository<TransactionEntity, Long> {
 
-    Stream<TransactionEntity> streamAllByAccId(long accId);
+    Stream<TransactionEntity> streamAllByTransactionId(long accId);
 }

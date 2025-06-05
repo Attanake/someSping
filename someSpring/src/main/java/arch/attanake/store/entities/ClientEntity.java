@@ -19,7 +19,7 @@ import java.util.List;
 public class ClientEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long clientId;
 
     @Column(unique = true)

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Форма заявки на кредит</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e8fbc6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .select-container select {
+            width: 1000000%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            font-size: 16px;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Заявка на кредит</h1>
+
+    <form action="#" th:action="@{/api/credits}" th:object="${client}" method="post">
+        <form action="#" th:action="@{/api/credits}" th:object="${client}" method="post">
+        <div class="form-group">
+            <label for="loan_type">Тип кредита:</label>
+            <select class="form-control" id="loan_type" name="loan_type" th:object="${loanType}" required>
+                <option value="" disabled selected>Выберите тип кредита</option>
+                <option th:each="loanType : ${loanTypes}"
+                        th:value="${loanType.id}"
+                        th:text="${loanType.name}"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="start_credit_amount">Начальная сумма кредита:</label>
+            <input type="number" id="start_credit_amount" name="start_credit_amount" step="0.01" required />
+        </div>
+
+        <div class="form-group">
+            <label for="loan_term">Срок кредита (в месяцах):</label>
+            <input type="number" id="loan_term" name="loan_term" required />
+        </div>
+
+        <div class="form-group">
+            <label id="client_id">Ваш ID:  <span th:text="${client.id}"/>></label>
+        </div>
+
+        <button type="submit">Отправить заявку</button>
+    </form>
+
+    <div class="form-footer">
+        <p>&copy; 2025 НеМошенники!!!. Почти все права защищены.</p>
+    </div>
+</div>
+</body>
+</html>

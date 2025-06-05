@@ -5,8 +5,9 @@
   spring:
     datasource:
       url: jdbc:postgresql://localhost/SpringTesting
-      username: attanake
-      password: 9313
+      username: postgres
+      password: 99331133
+
       driver-class-name: org.postgresql.Driver
     jpa:
       hibernate:

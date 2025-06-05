@@ -8,4 +8,7 @@ import java.util.Optional;
 public interface ClientLoginDetailsRepository extends JpaRepository<ClientLoginDetailsEntity, Long> {
 
     Optional<ClientLoginDetailsEntity> findById(Long clientId);
+    Optional<ClientLoginDetailsEntity> findByLogin(String login);
+
+    boolean existsByLogin(String login);
 }

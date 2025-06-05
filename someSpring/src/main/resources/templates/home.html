@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная страница</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #d4e4f4;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            margin-bottom: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <form th:object="${client}">
+    <div class="header">
+        <h1>Добро пожаловать, <span th:text="${client.name}"></span> <span th:text="${client.surname}"></span>!</h1>
+        <p>Ваши данные</p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Информация</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>ID:</strong> <span th:text="${client.clientId}"></span></p>
+                    <p><strong>Идентификационный номер:</strong> <span th:text="${client.identificationNum}"></span></p>
+                    <p><strong>Имя:</strong> <span th:text="${client.name}"></span></p>
+                    <p><strong>Фамилия:</strong> <span th:text="${client.secondName}"></span></p>
+                    <p><strong>Отчество:</strong> <span th:text="${client.surname}"></span></p>
+                    <p><strong>Дата рождения:</strong> <span th:text="${client.birthDate}"></span></p>
+                    <p><strong>Телефон:</strong> <span th:text="${client.phoneNum}"></span></p>
+                    <p><strong>Email:</strong> <span th:text="${client.email}"></span></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Ваши счета</h5>
+                </div>
+                <div class="card-body">
+                    <h6>Кредиты:</h6>
+                    <ul class="list-group mb-3" th:each="credit : ${client.credits}">
+                        <li class="list-group-item">
+                            Кредит №<span th:text="${credit.id}"></span>: <span th:text="${credit.amount}"></span> (Статус: <span th:text="${credit.status}"></span>)
+                        </li>
+                    </ul>
+                    <button class="btn btn-primary" th:onclick="'/takeCredit'" type="button">Взять кредит онлайн</button>
+
+                    <h6 class="mt-4">Карточные счета:</h6>
+                    <ul class="list-group mb-3" th:each="card : ${client.cardAccounts}">
+                        <li class="list-group-item">
+                            Счет №<span th:text="${card.id}"></span>: Баланс <span th:text="${card.balance}"></span>
+                        </li>
+                    </ul>
+                    <button class="btn btn-primary" th:onclick="''" type="button">Открыть счет</button>
+
+                    <h6 class="mt-4">Транзакции:</h6>
+                    <ul class="list-group mb-3" th:each="transaction : ${client.transactions}">
+                        <li class="list-group-item">
+                            Транзакция №<span th:text="${transaction.id}"></span>: <span th:text="${transaction.amount}"></span> (Дата: <span th:text="${#dates.format(transaction.date, 'dd.MM.yyyy')}"></span>)
+                        </li>
+                    </ul>
+                    <button class="btn btn-primary" th:onclick="''" type="button">Совершить транзакцию</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer text-center mt-4">
+        <p>&copy; 2025 НеМошенники!!!. Почти все права защищены.</p>
+    </div>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
