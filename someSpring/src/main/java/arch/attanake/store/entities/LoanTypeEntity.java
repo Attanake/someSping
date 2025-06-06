@@ -17,7 +17,7 @@ public class LoanTypeEntity {
     private Long loanTypeId;
 
     @Column(unique = true)
-    private String loanType;
+    private String loanTypeName;
 
     private Float interestRate;
 

@@ -30,14 +30,14 @@ public class LoanTypeController {
                                          @RequestParam("min_loan_term") Integer minLoanTerm){
 
         loanTypeRepository
-                .findByLoanType(loanTypeName)
+                .findByLoanTypeName(loanTypeName)
                 .ifPresent(loanType->{
                     throw new BadRequestException(loanTypeName + " is already exists");
                 });
 
         LoanTypeEntity loanType = loanTypeRepository.saveAndFlush(
                 LoanTypeEntity.builder()
-                        .loanType(loanTypeName)
+                        .loanTypeName(loanTypeName)
                         .interestRate(interestRate)
                         .maxLoanTerm(maxLoanTerm)
                         .minLoanTerm(minLoanTerm)

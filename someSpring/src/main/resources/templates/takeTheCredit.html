@@ -84,29 +84,60 @@
     <h1>Заявка на кредит</h1>
 
     <form action="#" th:action="@{/api/credits}" th:object="${client}" method="post">
-        <form action="#" th:action="@{/api/credits}" th:object="${client}" method="post">
         <div class="form-group">
             <label for="loan_type">Тип кредита:</label>
-            <select class="form-control" id="loan_type" name="loan_type" th:object="${loanType}" required>
+            <select class="form-control" id="loan_type" name="loan_type" required onchange="updateCreditAmountConstraints()">
                 <option value="" disabled selected>Выберите тип кредита</option>
-                <option th:each="loanType : ${loanTypes}"
-                        th:value="${loanType.id}"
-                        th:text="${loanType.name}"></option>
+                <th:block th:each="loanType : ${loanTypes}">
+                    <option th:value="${loanType.loanTypeName}"
+                            th:text="${loanType.loanTypeName}"
+                            th:data-min="${loanType.minLoanTerm}"
+                            th:data-max="${loanType.maxLoanTerm}"></option>
+                </th:block>
             </select>
         </div>
         <div class="form-group">
-            <label for="start_credit_amount">Начальная сумма кредита:</label>
-            <input type="number" id="start_credit_amount" name="start_credit_amount" step="0.01" required />
+            <label for="credit_amount">Сумма кредита:</label>
+            <input type="range" id="credit_amount" name="start_credit_amount" min="10" max="100000" step="10" oninput="updateCreditAmountDisplay(this.value)" />
+            <span id="credit_amount_display">0</span>
         </div>
 
         <div class="form-group">
-            <label for="loan_term">Срок кредита (в месяцах):</label>
-            <input type="number" id="loan_term" name="loan_term" required />
+            <label for="loan_term">Срок кредитования:</label>
+            <input type="range" id="loan_term" name="loan_term" min="0" max="360" step="6" oninput="updateLoanTermDisplay(this.value)" />
+            <span id="loan_term_display">12</span>
         </div>
+        <input type="hidden" name="client_id" th:value="${client.clientId}">
 
-        <div class="form-group">
-            <label id="client_id">Ваш ID:  <span th:text="${client.id}"/>></label>
-        </div>
+        <script>
+            function updateCreditAmountConstraints() {
+                const loanTypeSelect = document.getElementById('loan_type');
+                const loanTermAmount = document.getElementById('loan_term');
+
+                const selectedOption = loanTypeSelect.options[loanTypeSelect.selectedIndex];
+
+                const minAmount = selectedOption.getAttribute('data-min');
+                const maxAmount = selectedOption.getAttribute('data-max');
+
+                loanTermAmount.min = minAmount;
+                loanTermAmount.max = maxAmount;
+
+                if (loanTermAmount.value < minAmount || loanTermAmount.value > maxAmount) {
+                    loanTermAmount.value = minAmount;
+                }
+
+                updateLoanTermDisplay(loanTermAmount.value);
+            }
+
+            function updateCreditAmountDisplay(value) {
+                const display = document.getElementById('credit_amount_display');
+                display.textContent = value;
+            }
+            function updateLoanTermDisplay(value) {
+                const display = document.getElementById('loan_term_display');
+                display.textContent = value;
+            }
+        </script>
 
         <button type="submit">Отправить заявку</button>
     </form>

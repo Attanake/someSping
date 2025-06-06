@@ -40,8 +40,8 @@
                     <p><strong>ID:</strong> <span th:text="${client.clientId}"></span></p>
                     <p><strong>Идентификационный номер:</strong> <span th:text="${client.identificationNum}"></span></p>
                     <p><strong>Имя:</strong> <span th:text="${client.name}"></span></p>
-                    <p><strong>Фамилия:</strong> <span th:text="${client.secondName}"></span></p>
-                    <p><strong>Отчество:</strong> <span th:text="${client.surname}"></span></p>
+                    <p><strong>Фамилия:</strong> <span th:text="${client.surname}"></span></p>
+                    <p><strong>Отчество:</strong> <span th:text="${client.secondName}"></span></p>
                     <p><strong>Дата рождения:</strong> <span th:text="${client.birthDate}"></span></p>
                     <p><strong>Телефон:</strong> <span th:text="${client.phoneNum}"></span></p>
                     <p><strong>Email:</strong> <span th:text="${client.email}"></span></p>
@@ -58,15 +58,18 @@
                     <h6>Кредиты:</h6>
                     <ul class="list-group mb-3" th:each="credit : ${client.credits}">
                         <li class="list-group-item">
-                            Кредит №<span th:text="${credit.id}"></span>: <span th:text="${credit.amount}"></span> (Статус: <span th:text="${credit.status}"></span>)
+                            Кредит - <span th:text="${credit.creditId}"></span>: Сумма кредита: <span th:text="${credit.totalAmount}"></span> BYN
                         </li>
                     </ul>
-                    <button class="btn btn-primary" th:onclick="'/takeCredit'" type="button">Взять кредит онлайн</button>
+                    <button class="btn btn-primary" type="button" onclick="window.location.href='/api/take_credit'">
+                        Взять кредит онлайн
+                    </button>
+
 
                     <h6 class="mt-4">Карточные счета:</h6>
                     <ul class="list-group mb-3" th:each="card : ${client.cardAccounts}">
                         <li class="list-group-item">
-                            Счет №<span th:text="${card.id}"></span>: Баланс <span th:text="${card.balance}"></span>
+                            Счет №<span th:text="${card.accId}"></span>: Баланс <span th:text="${card.amountOnAcc}"></span>
                         </li>
                     </ul>
                     <button class="btn btn-primary" th:onclick="''" type="button">Открыть счет</button>
@@ -74,7 +77,7 @@
                     <h6 class="mt-4">Транзакции:</h6>
                     <ul class="list-group mb-3" th:each="transaction : ${client.transactions}">
                         <li class="list-group-item">
-                            Транзакция №<span th:text="${transaction.id}"></span>: <span th:text="${transaction.amount}"></span> (Дата: <span th:text="${#dates.format(transaction.date, 'dd.MM.yyyy')}"></span>)
+                            Транзакция №<span th:text="${transaction.transactionId}"></span>: <span th:text="${transaction.transactionAmount}"></span> (Дата: <span th:text="${#dates.format(transaction.date, 'dd.MM.yyyy')}"></span>)
                         </li>
                     </ul>
                     <button class="btn btn-primary" th:onclick="''" type="button">Совершить транзакцию</button>

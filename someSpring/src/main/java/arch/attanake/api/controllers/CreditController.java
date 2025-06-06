@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
@@ -24,7 +25,7 @@ import java.util.*;
 
 @Tag(name = "credit_controller")
 @Transactional
-@RestController
+@Controller
 @RequiredArgsConstructor
 public class CreditController {
 
@@ -44,18 +45,22 @@ public class CreditController {
 
     private static final String CREATE_CREDIT = "/api/credits";
     private static final String GET_MONTHLY_PAYMENTS = "/api/credits/{credit_id}/monthly_payment";
-    private static final String GET_CREDIT_BALANCE = "api/credits/{credit_id}/credit_balance";
+    private static final String GET_CREDIT_BALANCE = "/api/credits/{credit_id}/credit_balance";
+    private static final String CREATE_CREDIT_FORM = "/api/take_credit";
 
     @PostMapping(CREATE_CREDIT)
-    public CreditDto createCredit(
+    public String createCredit(
             @RequestParam("loan_type") String loanTypeName,
             @RequestParam("start_credit_amount") BigDecimal startCreditAmount,
             @RequestParam("loan_term") Integer loanDuration,
-            @RequestParam("client_id") Long clientId
+            @RequestParam("client_id") Long clientId,
+            Model model, HttpSession session
             ){
 
+        model.addAttribute("client", (ClientEntity) session.getAttribute("client"));
+
         LoanTypeEntity loanType = loanTypeRepository
-                .findByLoanType(loanTypeName)
+                .findByLoanTypeName(loanTypeName)
                 .orElseThrow(()-> new NotFoundException("Loan type " + loanTypeName +" doesn't exists"));
 
         ClientEntity client = clientRepository
@@ -64,7 +69,6 @@ public class CreditController {
 
         CardAccountEntity cardAccount = client.getCardAccounts().getFirst();
         cardAccount.setAmountOnAcc(cardAccount.getAmountOnAcc().add(startCreditAmount));
-        CardAccountDtoFactory.makeCardAccountDtoFactory(cardAccount);
 
         CardAccountEntity newAccount = cardAccountRepository.saveAndFlush(
                 CardAccountEntity.builder()
@@ -74,7 +78,6 @@ public class CreditController {
 
         CreditEntity credit = creditRepository.saveAndFlush(
                 CreditEntity.builder()
-                        .creditId(newAccount.getAccId())
                         .startCreditAmount(startCreditAmount)
                         .loanTypeEntity(loanType)
                         .loanTerm(loanDuration)
@@ -82,15 +85,15 @@ public class CreditController {
                         .loanBalance(sumOfPayments(startCreditAmount, loanDuration, loanType.getInterestRate()))
                         .loanIssueDate(LocalDateTime.now())
                         .finalFeeDate(LocalDateTime.now().plus(loanDuration, ChronoUnit.MONTHS))
+                        .cardAccount(newAccount)
                         .owner(client)
                         .build()
         );
 
-
-
         client.getCredits().add(credit);
+        session.setAttribute("client", client);
 
-        return CreditDtoFactory.makeCreditDto(credit);
+        return "home";
     }
 
 
@@ -144,10 +147,11 @@ public class CreditController {
         return BigDecimal.valueOf(credit.getStartCreditAmount().compareTo(cardAccount.getAmountOnAcc()));
     }
 
-    @GetMapping("/takeCredit")
+    @GetMapping(CREATE_CREDIT_FORM)
     public String takeCredit(HttpSession session, Model model){
         session.setAttribute("loanType", new LoanTypeEntity());
-        model.addAttribute("client", session.getAttribute("clientId"));
+        model.addAttribute("client",(ClientEntity) session.getAttribute("client"));
+        model.addAttribute("loanTypes", loanTypeRepository.findAll());
         model.addAttribute("loanType", session.getAttribute("loanType"));
         return "takeTheCredit";
     }

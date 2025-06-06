@@ -112,8 +112,11 @@ public class ClientController {
 
     @GetMapping(HOME)
     public String home(HttpSession session, Model model){
-        ClientEntity client = (ClientEntity) session.getAttribute("client");
+        ClientEntity client = clientRepository.findById((Long) session.getAttribute("clientId"))
+                .orElseThrow(() -> new RuntimeException("Клиент не найден"));
+        session.setAttribute("client", client);
         model.addAttribute("client", client);
+        session.setAttribute("client", client);
         return "home";
     }
 }

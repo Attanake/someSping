@@ -15,7 +15,7 @@ public class LoanTypeDto {
     private Long loanTypeId;
 
     @JsonProperty("loan_type")
-    private String loanType;
+    private String loanTypeName;
 
     @JsonProperty("interest_rate")
     private Float interestRate;

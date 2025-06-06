@@ -9,7 +9,7 @@ public class LoanTypeDtoFactory {
     public static LoanTypeDto makeLoanTypeDto(LoanTypeEntity entity){
         return LoanTypeDto.builder()
                 .loanTypeId(entity.getLoanTypeId())
-                .loanType(entity.getLoanType())
+                .loanTypeName(entity.getLoanTypeName())
                 .interestRate(entity.getInterestRate())
                 .maxLoanTerm(entity.getMaxLoanTerm())
                 .minLoanTerm(entity.getMinLoanTerm())

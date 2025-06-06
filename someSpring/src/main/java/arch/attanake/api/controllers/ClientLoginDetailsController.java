@@ -1,22 +1,15 @@
 package arch.attanake.api.controllers;
 
-import arch.attanake.api.dto.ClientLoginDetailsDto;
 import arch.attanake.api.exceptions.BadRequestException;
-import arch.attanake.api.exceptions.NotFoundException;
-import arch.attanake.api.factroies.ClientLoginDetailsDtoFactory;
 import arch.attanake.store.entities.ClientEntity;
 import arch.attanake.store.entities.ClientLoginDetailsEntity;
 import arch.attanake.store.repositories.ClientLoginDetailsRepository;
 import arch.attanake.store.repositories.ClientRepository;
-import com.fasterxml.jackson.databind.DatabindContext;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -68,6 +61,8 @@ public class ClientLoginDetailsController {
 
     @GetMapping(AUTHORIZATION)
     public String authorizationForm(Model model, HttpSession session) {
+        session.setAttribute("loginDetails", new ClientLoginDetailsEntity());
+        session.setAttribute("client", new ClientEntity());
         return "authorization";
     }
 
@@ -78,7 +73,7 @@ public class ClientLoginDetailsController {
                 .orElseThrow(() -> new BadRequestException("Client account(id=" + clientId + ") doesn't exist"));
         model.addAttribute("client", client);
         session.setAttribute("client", client);
-        return "registration_password";
+        return "registrationPassword";
     }
 
     @PostMapping(AUTHORIZATION)
@@ -92,6 +87,7 @@ public class ClientLoginDetailsController {
             if (encoder.matches(password, details.getPassword())) {
                 ClientEntity client = clientRepository.findById(details.getClientId()).orElse(null);
                 model.addAttribute("client", client);
+                session.setAttribute("client", client);
                 return "home";
             }
         }

@@ -17,16 +17,19 @@ import java.time.LocalDateTime;
 public class CreditEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long creditId;
 
     private BigDecimal startCreditAmount;
 
     @ManyToOne()
-    @JoinColumn(name = "loan_type", referencedColumnName = "loanType")
+    @JoinColumn(name = "loanType", referencedColumnName = "loanTypeName")
     private LoanTypeEntity loanTypeEntity;
 
     private Integer loanTerm;
+
+    @Version
+    private Integer version;
 
     private BigDecimal totalAmount;
 
