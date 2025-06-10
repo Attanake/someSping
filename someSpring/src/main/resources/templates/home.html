@@ -72,7 +72,7 @@
                             Счет №<span th:text="${card.accId}"></span>: Баланс <span th:text="${card.amountOnAcc}"></span>
                         </li>
                     </ul>
-                    <button class="btn btn-primary" th:onclick="''" type="button">Открыть счет</button>
+                    <button class="btn btn-primary" onclick="window.location.href='/api/card_accounts/create'" type="button">Открыть счет</button>
 
                     <h6 class="mt-4">Транзакции:</h6>
                     <ul class="list-group mb-3" th:each="transaction : ${client.transactions}">

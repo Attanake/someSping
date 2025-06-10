@@ -86,15 +86,20 @@
     <form action="#" th:action="@{/api/credits}" th:object="${client}" method="post">
         <div class="form-group">
             <label for="loan_type">Тип кредита:</label>
-            <select class="form-control" id="loan_type" name="loan_type" required onchange="updateCreditAmountConstraints()">
+            <select class="form-control" id="loan_type" name="loan_type" required
+                    onchange="updateCreditAmountConstraints()">
                 <option value="" disabled selected>Выберите тип кредита</option>
                 <th:block th:each="loanType : ${loanTypes}">
                     <option th:value="${loanType.loanTypeName}"
                             th:text="${loanType.loanTypeName}"
                             th:data-min="${loanType.minLoanTerm}"
-                            th:data-max="${loanType.maxLoanTerm}"></option>
+                            th:data-max="${loanType.maxLoanTerm}"
+                            th:data-interest-rate="${loanType.interestRate}"></option>
                 </th:block>
             </select>
+            <span id="tabs">Процентная ставка данного кредита = </span>
+            <span id="loan_interest_rate">0</span>
+            <span id="percent">%</span>
         </div>
         <div class="form-group">
             <label for="credit_amount">Сумма кредита:</label>
@@ -125,6 +130,9 @@
                 if (loanTermAmount.value < minAmount || loanTermAmount.value > maxAmount) {
                     loanTermAmount.value = minAmount;
                 }
+                var interestRate = selectedOption.getAttribute("data-interest-rate");
+
+                document.getElementById("loan_interest_rate").innerText = interestRate ? (parseFloat(interestRate) * 100).toFixed(2) : '0';
 
                 updateLoanTermDisplay(loanTermAmount.value);
             }

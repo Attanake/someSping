@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создание карточного счета</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Создание нового карточного счета</h4>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/api/card_accounts}" th:object="${cardAccount}" method="post">
+                        <div class="mb-3">
+                            <label for="accType" class="form-label">Тип счета</label>
+                            <select class="form-select" id="accType" onchange="updateAccTerm()"  required>
+                                <option value="" disabled selected>Выберите тип счета</option>
+                                <th:block th:each="accType : ${accountTypes}">
+                                <option th:value="${accType.accType}"
+                                        th:text="${accType.accType}"
+                                        th:data-min="${accType.minAccTerm}"
+                                        th:data-max="${accType.maxAccTerm}"
+                                        th:data-interest-rate="${accType.interestRate}"></option>
+                                </th:block>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Валюта счета</label>
+                            <div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="currencyBYN"
+                                           th:field="*{accCurrency}" th:value="BYN" required>
+                                    <label class="form-check-label" for="currencyBYN">BYN</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="currencyEUR"
+                                           th:field="*{accCurrency}" th:value="EUR">
+                                    <label class="form-check-label" for="currencyEUR">EUR</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="currencyUSD"
+                                           th:field="*{accCurrency}" th:value="USD">
+                                    <label class="form-check-label" for="currencyRUB">USD</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="currencyRUB"
+                                           th:field="*{accCurrency}" th:value="RUB">
+                                    <label class="form-check-label" for="currencyRUB">RUB</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="accTerm">Срок действия:</label>
+                            <input type="range" id="accTerm" name="start_credit_amount" min="6" max="120" step="6" oninput="updateLoanTermDisplay(this.value)" />
+                            <span id="loanTermDisplay">0</span>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button type="reset" class="btn btn-outline-secondary me-md-2">Очистить</button>
+                            <button type="submit" class="btn btn-primary">Создать счет</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function updateAccTerm() {
+        const accTypeSelect = document.getElementById('accType');
+        const accTermAmount = document.getElementById('accTerm');
+
+        const selectedOption = accTypeSelect.options[accTypeSelect.selectedIndex];
+
+        const minAmount = selectedOption.getAttribute('data-min');
+        const maxAmount = selectedOption.getAttribute('data-max');
+
+        accTermAmount.min = minAmount;
+        accTermAmount.max = maxAmount;
+
+        if (accTerm.value < minAmount || accTerm.value > maxAmount) {
+            accTerm.value = minAmount;
+        }
+
+        updateLoanTermDisplay(accTermAmount.value);
+    }
+
+    function updateLoanTermDisplay(value) {
+        const display = document.getElementById('loanTermDisplay');
+        display.textContent = value;
+    }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -88,13 +88,14 @@ public class ClientController {
     }
 
     @GetMapping(REGISTRATION)
-    public String register(Model model){
+    public String register(Model model, HttpSession session) {
         model.addAttribute("client", new ClientEntity());
+        session.setAttribute("client", new ClientEntity());
         return "registration";
     }
 
     @PostMapping("/register")
-    public String registerClient(@ModelAttribute ClientEntity client) {
+    public String registerClient(@ModelAttribute ClientEntity client, HttpSession session) {
         ClientEntity newClient = clientRepository.saveAndFlush(
                 ClientEntity.builder()
                         .identificationNum(client.getIdentificationNum())
@@ -107,7 +108,8 @@ public class ClientController {
                         .phoneNum(client.getPhoneNum())
                         .build()
         );
-        return "redirect:/api/reg/user_login_details/" + newClient.getClientId();
+        session.setAttribute("client", newClient);
+        return "home";
     }
 
     @GetMapping(HOME)
@@ -116,7 +118,6 @@ public class ClientController {
                 .orElseThrow(() -> new RuntimeException("Клиент не найден"));
         session.setAttribute("client", client);
         model.addAttribute("client", client);
-        session.setAttribute("client", client);
         return "home";
     }
 }

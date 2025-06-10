@@ -12,16 +12,22 @@ import arch.attanake.store.repositories.CardAccountRepository;
 import arch.attanake.store.repositories.CardAccountTypeRepository;
 import arch.attanake.store.repositories.ClientRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.w3c.dom.html.HTMLTableCaptionElement;
+
 import java.math.BigDecimal;
 
 @Tag(name = "card_account_controller")
 @Transactional
-@RestController
+@Controller
 @RequiredArgsConstructor
 public class CardAccountController {
 
@@ -32,6 +38,8 @@ public class CardAccountController {
     private final CardAccountTypeRepository cardAccountTypeRepository;
 
     private static final String CREATE_CARD_ACCOUNT = "/api/card_accounts";
+
+    private final String CREATE_CARD_ACCOUNT_FORM = "/api/card_accounts/create";
 
     @PostMapping(CREATE_CARD_ACCOUNT)
     public CardAccountDto createCardAccount(@RequestParam("accType") String accountType,
@@ -64,5 +72,13 @@ public class CardAccountController {
         clientEntity.getCardAccounts().add(cardAccount);
 
         return CardAccountDtoFactory.makeCardAccountDtoFactory(cardAccount);
+    }
+
+    @GetMapping(CREATE_CARD_ACCOUNT_FORM)
+    public String createCardAccountForm(HttpSession session, Model model){
+        model.addAttribute("client",(ClientEntity) session.getAttribute("client"));
+        model.addAttribute("cardAccount", new CardAccountEntity());
+        model.addAttribute("accountTypes", cardAccountTypeRepository.findAll());
+        return "CreateCardAccountForm";
     }
 }

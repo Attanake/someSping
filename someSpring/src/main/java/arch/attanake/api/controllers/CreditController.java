@@ -1,9 +1,6 @@
 package arch.attanake.api.controllers;
 
-import arch.attanake.api.dto.CreditDto;
 import arch.attanake.api.exceptions.NotFoundException;
-import arch.attanake.api.factroies.CardAccountDtoFactory;
-import arch.attanake.api.factroies.CreditDtoFactory;
 import arch.attanake.store.entities.*;
 import arch.attanake.store.repositories.CardAccountRepository;
 import arch.attanake.store.repositories.ClientRepository;
