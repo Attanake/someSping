@@ -11,9 +11,13 @@ import arch.attanake.store.entities.TransactionEntity;
 import arch.attanake.store.repositories.CardAccountRepository;
 import arch.attanake.store.repositories.TransactionRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -24,21 +28,22 @@ import java.util.stream.Stream;
 
 @Tag(name = "transactions_controller")
 @Transactional
-@RestController
+@Controller
 @RequiredArgsConstructor
 public class TransactionController {
 
     private final CardAccountRepository cardAccountRepository;
     private final TransactionRepository transactionRepository;
 
-    private static final String CREATE_TRANSACTION = "/api/{acc_id}/transactions/new";
+    private static final String CREATE_TRANSACTION = "/api//transactions/new";
     private static final String FIND_ALL_TRANSACTIONS = "/api/{acc_id}/transactions/find_all";
 
     @PostMapping(CREATE_TRANSACTION)
     @Transactional
-    public HttpStatus createTransaction(@PathVariable("acc_id") Long senderAccId,
-                                         @RequestParam("payee_acc_id") Long payeeAccId,
-                                         @RequestParam("transaction_amount") BigDecimal transactionAmount){
+    public HttpStatus createTransaction(@RequestParam("payeeAccId") Long payeeAccId,
+                                        @RequestParam("senderAccId") Long senderAccId,
+                                        @RequestParam("transaction_amount") BigDecimal transactionAmount,
+                                        HttpSession session) {
 
         if(transactionAmount.intValue()<=2){
             throw new BadRequestException("Transaction amount is less than required");
@@ -102,5 +107,12 @@ public class TransactionController {
         Stream<TransactionEntity> transactionEntityStream = transactionRepository.streamAllByTransactionId(accId);
 
         return transactionEntityStream.map(TransactionDtoFactory::makeTransactionDto).collect(Collectors.toList());
+    }
+
+    @GetMapping("/api/transactionFrom")
+    public String showTransactionForm(HttpSession session, Model model) {
+        ClientEntity client = (ClientEntity) session.getAttribute("client");
+        model.addAttribute("userAccounts", client.getCardAccounts() );
+        return "transaction";
     }
 }

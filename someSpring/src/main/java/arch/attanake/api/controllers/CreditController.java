@@ -89,7 +89,7 @@ public class CreditController {
 
         client.getCredits().add(credit);
         session.setAttribute("client", client);
-
+        model.addAttribute("client", client);
         return "home";
     }
 

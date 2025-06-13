@@ -17,13 +17,12 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.w3c.dom.html.HTMLTableCaptionElement;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Tag(name = "card_account_controller")
 @Transactional
@@ -42,36 +41,38 @@ public class CardAccountController {
     private final String CREATE_CARD_ACCOUNT_FORM = "/api/card_accounts/create";
 
     @PostMapping(CREATE_CARD_ACCOUNT)
-    public CardAccountDto createCardAccount(@RequestParam("accType") String accountType,
-                                            @RequestParam("amount_on_acc") BigDecimal amountOnAcc,
-                                            @RequestParam("acc_currency") Currencies currency,
-                                            @RequestParam("acc_term") Integer accTerm,
-                                            @RequestParam("client_id") Long clientId ){
+    public String createCardAccount(@ModelAttribute("cardAccount") CardAccountEntity cardAccount,
+                                            @ModelAttribute("accType") CardAccountTypeEntity accType,
+                                            HttpSession session, Model model) {
 
-        CardAccountTypeEntity accTypeEntity = cardAccountTypeRepository
-                .findByAccType(accountType)
-                .orElseThrow(()-> new NotFoundException("Account type \"" + accountType + "\" doesn't exists"));
 
-        ClientEntity clientEntity = clientRepository
-                .findById(clientId)
-                .orElseThrow(()-> new NotFoundException("Client(id=" + clientId + ") cannot be found"));
+        CardAccountTypeEntity accountType = cardAccountTypeRepository.findByAccType(accType.getAccType().replaceAll("^,", ""))
+                .orElseThrow(() -> new IllegalArgumentException("Invalid account type"));
 
-        if(accTerm >= accTypeEntity.getMaxAccTerm() || accTerm <= accTypeEntity.getMinAccTerm())
-            throw new BadRequestException("Account term is out of bounds");
+        ClientEntity client = (ClientEntity) session.getAttribute("client");
 
-        CardAccountEntity cardAccount = cardAccountRepository.saveAndFlush(
+
+        CardAccountEntity newCardAccount = cardAccountRepository.saveAndFlush(
                 CardAccountEntity.builder()
-                        .accType(accTypeEntity)
-                        .amountOnAcc(amountOnAcc)
-                        .accCurrency(currency)
-                        .accTerm(accTerm)
-                        .owner(clientEntity)
+                        .accType(accountType)
+                        .amountOnAcc(BigDecimal.ZERO)
+                        .accCurrency(cardAccount.getAccCurrency())
+                        .accTerm(cardAccount.getAccTerm())
+                        .owner(client)
                         .build()
         );
 
-        clientEntity.getCardAccounts().add(cardAccount);
+        if(client.getCardAccounts() == null){
+            client.setCardAccounts(new ArrayList<>());
+        }
 
-        return CardAccountDtoFactory.makeCardAccountDtoFactory(cardAccount);
+        client.getCardAccounts().add(newCardAccount);
+
+        clientRepository.save(client);
+
+        session.setAttribute("client", client);
+        model.addAttribute("client", client);
+       return "home";
     }
 
     @GetMapping(CREATE_CARD_ACCOUNT_FORM)

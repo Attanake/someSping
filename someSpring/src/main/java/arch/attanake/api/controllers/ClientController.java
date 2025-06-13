@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -95,7 +97,8 @@ public class ClientController {
     }
 
     @PostMapping("/register")
-    public String registerClient(@ModelAttribute ClientEntity client, HttpSession session) {
+    public String registerClient(@ModelAttribute ClientEntity client, HttpSession session, Model model,
+                                 RedirectAttributes redirectAttributes) {
         ClientEntity newClient = clientRepository.saveAndFlush(
                 ClientEntity.builder()
                         .identificationNum(client.getIdentificationNum())
@@ -109,7 +112,9 @@ public class ClientController {
                         .build()
         );
         session.setAttribute("client", newClient);
-        return "home";
+        model.addAttribute("client", newClient);
+        redirectAttributes.addFlashAttribute("client", newClient);
+        return "registrationPassword";
     }
 
     @GetMapping(HOME)

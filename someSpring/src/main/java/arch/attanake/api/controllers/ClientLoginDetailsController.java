@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Optional;
 
@@ -25,19 +26,19 @@ public class ClientLoginDetailsController {
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(16);
 
     private final ClientLoginDetailsRepository clientLoginDetailsRepository;
-
     private final ClientRepository clientRepository;
 
     private static final String CREATE_USER_LOGIN_DETAILS = "/api/user_login_details/";
     private static final String GET_USER_LOGIN_DETAILS_BY_ID = "/api/get/user_login_details/{client_id}";
     private static final String AUTHORIZATION = "/api/authorization";
-    private static final String REG_FORM = "/api/reg/user_login_details/{client_id}";
+    private static final String REG_FORM = "/api/reg/user_login_details/";
 
 
     @PostMapping(CREATE_USER_LOGIN_DETAILS)
     public String createLoginDetails(HttpSession session, Model model,
                                      @RequestParam("login") String login,
-                                     @RequestParam("password") String password) {
+                                     @RequestParam("password") String password,
+                                     RedirectAttributes redirectAttributes) {
         ClientEntity client = (ClientEntity) session.getAttribute("client");
         clientLoginDetailsRepository.saveAndFlush(
                 ClientLoginDetailsEntity.builder()
@@ -47,7 +48,9 @@ public class ClientLoginDetailsController {
                         .isAdmin(Boolean.FALSE)
                         .build()
         );
-
+        session.setAttribute("client", client);
+        model.addAttribute("client", client);
+        redirectAttributes.addFlashAttribute("client", client);
         return "home";
     }
 
@@ -67,10 +70,11 @@ public class ClientLoginDetailsController {
     }
 
     @GetMapping(REG_FORM)
-    public String register(Model model, @PathVariable("client_id") Long clientId, HttpSession session){
-        ClientEntity client = clientRepository
-                .findById(clientId)
-                .orElseThrow(() -> new BadRequestException("Client account(id=" + clientId + ") doesn't exist"));
+    public String register(Model model, HttpSession session){
+        ClientEntity client = (ClientEntity) session.getAttribute("client");
+        clientRepository
+                .findById(client.getClientId())
+                .orElseThrow(() -> new BadRequestException("Client account(id=" + client.getClientId() + ") doesn't exist"));
         model.addAttribute("client", client);
         session.setAttribute("client", client);
         return "registrationPassword";

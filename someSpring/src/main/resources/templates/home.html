@@ -80,7 +80,7 @@
                             Транзакция №<span th:text="${transaction.transactionId}"></span>: <span th:text="${transaction.transactionAmount}"></span> (Дата: <span th:text="${#dates.format(transaction.date, 'dd.MM.yyyy')}"></span>)
                         </li>
                     </ul>
-                    <button class="btn btn-primary" th:onclick="''" type="button">Совершить транзакцию</button>
+                    <button class="btn btn-primary" onclick="window.location.href='/api/transactionFrom'" type="button">Совершить транзакцию</button>
                 </div>
             </div>
         </div>

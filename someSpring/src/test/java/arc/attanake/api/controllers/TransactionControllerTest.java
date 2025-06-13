@@ -6,6 +6,7 @@ import arch.attanake.store.entities.CardAccountEntity;
 import arch.attanake.store.entities.ClientEntity;
 import arch.attanake.store.repositories.CardAccountRepository;
 import arch.attanake.store.repositories.TransactionRepository;
+import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,9 +18,12 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.ui.Model;
+
 import java.math.BigDecimal;
 import java.util.Optional;
 
+import static org.mockito.Mockito.mockitoSession;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -54,7 +58,7 @@ class TransactionControllerTest {
         Long secondClientId = 2L;
         when(cardAccountRepository.findByAccId(firstClientId)).thenReturn(null);
         when(cardAccountRepository.findByAccId(secondClientId)).thenReturn(null);
-        Assertions.assertThrows(BadRequestException.class,() -> transactionController.createTransaction(firstClientId, secondClientId, BigDecimal.valueOf(1)));
+        Assertions.assertThrows(BadRequestException.class,() -> transactionController.createTransaction(firstClientId,  BigDecimal.valueOf(1),  mockitoSession()));
     }
 
     @Test

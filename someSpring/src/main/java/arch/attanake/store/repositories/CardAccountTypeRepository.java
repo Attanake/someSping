@@ -1,7 +1,6 @@
 package arch.attanake.store.repositories;
 
 import arch.attanake.store.entities.CardAccountTypeEntity;
-import arch.attanake.store.entities.LoanTypeEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
